@@ -1,8 +1,10 @@
-import time
+import time as t
 from SwSpotify import spotify
 import pyautogui as pg
 import json
 import requests
+import webbrowser
+
 
 def getArticles():
     url = 'https://hacker-news.firebaseio.com/v0/topstories.json'
@@ -44,27 +46,23 @@ def getArticleText(id): # returns the text of the article
 
 def main():
     articleIds = getArticles()
-    print(articleIds)
+    print(len(articleIds))
+    no = 1
     for articleId in articleIds:
         article = getArticle(articleId)
-        title = article['title']
         author = article['by']
-        try:
-            comments = article['descendants']
-        except KeyError:
-            comments = 0
+        try: comments = article['descendants']
+        except KeyError: comments = 0
         id = article['id']
-        try:
-            kids = article['kids']
-        except KeyError:
-            kids = []
+        try: kids = article['kids']
+        except KeyError: kids = []
         score = article['score']
         time = article['time']
+        title = article['title']
         type = article['type']
-        try:
+        try: 
             url = article['url'] 
-        except KeyError:
-            url = 'No URL'
+        except KeyError: url = ''
         articleDict = {'id': id,
                        'author': author,
                        'comments': comments,
@@ -74,12 +72,28 @@ def main():
                        'title': title,
                        'type': type,
                        'url': url}
+        print(f'{no}: {type}')
         # printing all the article info
         maxLenghtKey = max(len(key) for key in articleDict)
         for key, value in articleDict.items():
-            print(f'{key}:{" "*(maxLenghtKey-len(key))} {value}')
+                print(f'{key}:{" "*(maxLenghtKey-len(key))} {value}')
+        if url != '':
+            with open('urls.txt', "r+") as f:
+                urls = f.readlines()
+                if  url+'\n' not in urls:
+                    with open('urls.txt', "a+") as f:
+                        f.write(f"{url}\n")
+                    webbrowser.open(url, new=0, autoraise=True)
+                    t.sleep(20)
+                else:
+                    print("Already read")
+        no += 1
         print('\n')
-        
 
 if __name__ == "__main__":
     main()
+    import webbrowser
+
+url = 'https://pythonexamples.org'
+webbrowser.register('chrome', None, webbrowser.BackgroundBrowser("C://Program Files (x86)//Google//Chrome//Application//chrome.exe"))
+webbrowser.get('chrome').open(url)
