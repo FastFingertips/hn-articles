@@ -23,13 +23,21 @@ def readtxtfilelines():
     with open("urls.txt", 'r') as f:
         return f.readlines()
 
+def countdown(t):
+ while t:
+    mins, secs = divmod(t, 60)
+    timer = '{:02d}:{:02d}'.format(mins, secs)
+    os.system(f'title {timer}') 
+    time.sleep(1)
+    t -= 1
+
 def urlcheck(url):
     filename = "urls.json"
     if not os.path.exists(filename):
         with open(filename, 'w') as f:
             json.dump({}, f)
             print("File created")
-            time.sleep(4)
+            countdown(4)
 
     jsonFile = open(filename, "r") # Open the JSON file for reading
     data = json.load(jsonFile) # Read the JSON into the buffer
@@ -58,29 +66,22 @@ def getArticle(id):
     return r.json()
 
 def articleParser(article_json):
-    d = {
-         'gets': {
-          'id': None,
-          'by': None,
-          'descendants': 0, # sometimes article has no comments
-          'kids': [],
-          'score': None,
-          'time': None,
-          'title': None,
-          'type': None,
-          'url': ''
-          },
-          'rets': {
-          }
-         }
+    data = {'id': None,
+           'by': None,
+           'descendants': 0, # sometimes article has no comments
+           'kids': [],
+           'score': None,
+           'time': None,
+           'title': None,
+           'type': None,
+           'url': ''}
 
-    for getKey, exceptValue in d['gets'].items():
-        try: d['rets'][getKey] = article_json[getKey]
+    for getKey, exceptValue in data.items():
+        try: data[getKey] = article_json[getKey]
         except KeyError: 
-            if exceptValue != None: d['rets'][getKey] = exceptValue
+            if exceptValue != None: data[getKey] = exceptValue
             else: print(f'{getKey} not found')
-    print(json.dumps(d, indent=1))
-    return d['rets']
+    return data
 
 
 def dictToTable(dict, table_name):
@@ -119,7 +120,7 @@ def main():
             filechange = urlcheck(url)
             if filechange:
                 webbrowser.open(url, new=2)
-                time.sleep(60)
+                countdown(59)
 
         print('\n')
 
