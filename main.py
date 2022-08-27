@@ -43,17 +43,22 @@ def urlcheck(url):
     data = json.load(jsonFile) # Read the JSON into the buffer
     jsonFile.close() # Close the JSON file
 
+
     print('Visit: ', end='')
     if url in data.keys(): 
         print(timestampToDate(int(data[url])))
+        print(f'Url No: {list(data.keys()).index(url) + 1}')
         return False
     else:
         data[url] = str(getTimestamp())
         jsonFile = open(filename, "w+") # Save our changes to JSON file
         jsonFile.write(json.dumps(data, indent=4))
         jsonFile.close()
+
         print(timestampToDate(getTimestamp()), 'New Visit!')
+        print(f'Url Count: {len(data.keys())}')
         return True
+
 
 def getArticles():
     url = 'https://hacker-news.firebaseio.com/v0/topstories.json'
