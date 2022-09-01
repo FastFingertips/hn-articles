@@ -108,26 +108,28 @@ def parallelBlank(str, dict):
     return parallelBlank
 
 def main():
-    articleIds = getArticles()
-    for rank, articleId in enumerate(articleIds):
-        articleJson = getArticle(articleId)
-        articleDict = articleParser(articleJson)
+    while True:
+        print('Getting articles...\n')
+        articleIds = getArticles()
+        for rank, articleId in enumerate(articleIds):
+            articleJson = getArticle(articleId)
+            articleDict = articleParser(articleJson)
 
-        # dictToTable(articleDict, articleDict["title"])
-        no = str(rank + 1)
-        print(no)
-        for key, value in articleDict.items():
-            blanks = parallelBlank(key, articleDict)
-            print(f'{key}:{blanks} {value}')
+            # dictToTable(articleDict, articleDict["title"])
+            no = str(rank + 1)
+            print(no)
+            for key, value in articleDict.items():
+                blanks = parallelBlank(key, articleDict)
+                print(f'{key}:{blanks} {value}')
 
-        url = articleDict['url']
-        if url != '':
-            filechange = urlcheck(url)
-            if filechange:
-                webbrowser.open(url, new=2)
-                countdown(59)
-
-        print('\n')
+            url = articleDict['url']
+            if url != '':
+                filechange = urlcheck(url)
+                if filechange:
+                    webbrowser.open(url, new=2)
+                    countdown(59)
+            print('\n')
+            if rank == 50: print('Top 50 articles reached!'); break
 
 if __name__ == "__main__":
     main()
