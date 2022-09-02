@@ -59,15 +59,23 @@ def urlcheck(url):
         print(f'Url Count: {len(data.keys())}')
         return True
 
+def getReq(url, timeout=5):
+    while True:
+        try:
+            _ = requests.get(url, timeout=timeout)
+            return _
+        except requests.ConnectionError: # check internet connection
+            print("No internet connection available.", end='\r')
+            time.sleep(1)
 
 def getArticles():
     url = 'https://hacker-news.firebaseio.com/v0/topstories.json'
-    r = requests.get(url)
+    r = getReq(url)
     return r.json()
 
 def getArticle(id):
     url = 'https://hacker-news.firebaseio.com/v0/item/' + str(id) + '.json'
-    r = requests.get(url)
+    r = getReq(url)
     return r.json()
 
 def articleParser(article_json):
