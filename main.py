@@ -96,7 +96,6 @@ def articleParser(article_json):
             else: print(f'{getKey} not found')
     return data
 
-
 def dictToTable(dict, table_name):
     from rich.console import Console
     from rich.table import Table
@@ -115,7 +114,41 @@ def parallelBlank(str, dict):
     parallelBlank = ' ' * (maxLenghtKey - len(str))
     return parallelBlank
 
+def cryptoEffect(v):
+    import random
+    print(v,end="")
+    print("\r", end="") 
+    words = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+    numbers = random.sample(range(1, 100), 10)
+
+    numbers = [str(i) for i in numbers] 
+    for n in numbers:
+        randomNumbers = (random.choice(numbers) * random.randint(0, len(v)))[:len(v)]
+        randomWords = ''.join(random.choice(words) for i in range(len(v)))
+        print(randomNumbers,  end="\r")
+        print(randomWords, end="\r")
+        randomSleep = random.randint(0, 100) / 300
+        time.sleep(randomSleep)
+
+
+def defaultReworker(defaultValue, minValue, maxValue, q):
+    cryptoEffect(q)
+    while True:
+        reValue = input(f'{q} (default: {defaultValue})\n')
+        if len(reValue) == 0: 
+            print(f'Using default value: {defaultValue}')
+            return defaultValue
+
+        try:
+            reValue = int(reValue)
+            if reValue <= maxValue and reValue > minValue: return reValue
+            else: print(f'Please enter a number between {minValue} and {maxValue}, or leave blank for default', defaultValue)
+        except ValueError: print('Please enter a number')
+
 def main():
+    articleCount = defaultReworker(50, 0, 500, 'How many articles do you want to see?')
+    articleCountdown = defaultReworker(60, 0, 3600, 'How many seconds do you want to wait between each article?')
+
     while True:
         print('Getting articles...\n')
         articleIds = getArticles()
@@ -135,9 +168,9 @@ def main():
                 filechange = urlcheck(url)
                 if filechange:
                     webbrowser.open(url, new=2)
-                    countdown(59)
+                    countdown(articleCountdown)
             print('\n')
-            if rank == 50: print('Top 50 articles reached!'); break
+            if rank == articleCount: print(f'Top {articleCount} articles reached!'); break
 
 if __name__ == "__main__":
     main()
