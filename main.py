@@ -43,7 +43,6 @@ def urlcheck(url):
     data = json.load(jsonFile) # Read the JSON into the buffer
     jsonFile.close() # Close the JSON file
 
-
     print('Visit: ', end='')
     if url in data.keys(): 
         print(timestampToDate(int(data[url])))
@@ -61,9 +60,7 @@ def urlcheck(url):
 
 def getReq(url, timeout=5):
     while True:
-        try:
-            _ = requests.get(url, timeout=timeout)
-            return _
+        try: return requests.get(url, timeout=timeout)
         except requests.ConnectionError: # check internet connection
             print("No internet connection available.", end='\r')
             time.sleep(1)
@@ -172,5 +169,4 @@ def main():
             print('\n')
             if rank == articleCount: print(f'Top {articleCount} articles reached!'); break
 
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__": main()
