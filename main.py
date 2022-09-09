@@ -150,6 +150,7 @@ def main():
         print('Getting articles...\n')
         articleIds = getArticles()
         for rank, articleId in enumerate(articleIds):
+            os.system(f'title Article: {articleCount}/{rank}') 
             articleJson = getArticle(articleId)
             articleDict = articleParser(articleJson)
 
