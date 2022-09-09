@@ -23,11 +23,11 @@ def readtxtfilelines():
     with open("urls.txt", 'r') as f:
         return f.readlines()
 
-def countdown(t):
+def countdown(t, msg='{}'):
  while t:
     mins, secs = divmod(t, 60)
     timer = '{:02d}:{:02d}'.format(mins, secs)
-    os.system(f'title {timer}') 
+    os.system(f'title {msg}'.format(timer)) 
     time.sleep(1)
     t -= 1
 
@@ -37,7 +37,7 @@ def urlcheck(url):
         with open(filename, 'w') as f:
             json.dump({}, f)
             print("File created")
-            countdown(4)
+            countdown(4, 'Continue in: {}')
 
     jsonFile = open(filename, "r") # Open the JSON file for reading
     data = json.load(jsonFile) # Read the JSON into the buffer
@@ -148,6 +148,7 @@ def main():
 
     while True:
         print('Getting articles...\n')
+        os.system(f'title Getting articles...  ') 
         articleIds = getArticles()
         for rank, articleId in enumerate(articleIds):
             os.system(f'title Article: {articleCount}/{rank}') 
@@ -166,7 +167,7 @@ def main():
                 filechange = urlcheck(url)
                 if filechange:
                     webbrowser.open(url, new=2)
-                    countdown(articleCountdown)
+                    countdown(articleCountdown, 'Next article in: {}')
             print('\n')
             if rank == articleCount: print(f'Top {articleCount} articles reached!'); break
 
