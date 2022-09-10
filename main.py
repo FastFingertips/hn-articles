@@ -172,5 +172,5 @@ def main():
         if rank == articleCount: print(f'Top {articleCount} articles reached!'); break
 
 if __name__ == "__main__":
-    if os.name == 'nt': input("This app tested on Windows 10.\nBut you can still run it on other OSes.\nPress enter to continue or ctrl+c to exit\n")
+    if os.name != 'nt': input("This app tested on Windows 10.\nBut you can still run it on other OSes.\nPress enter to continue or ctrl+c to exit\n")
     main()
