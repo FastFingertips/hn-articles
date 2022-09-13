@@ -143,7 +143,7 @@ def defaultReworker(defaultValue, minValue, maxValue, q):
         except ValueError: print('Please enter a number')
 
 def main():
-    articleCount = defaultReworker(50, 0, 500, 'How many articles do you want to see?')
+    articleCount = defaultReworker(60, 0, 500, 'How many articles do you want to see?')
     articleCountdown = defaultReworker(60, 0, 3600, 'How many seconds do you want to wait between each article?')
 
     while True:
@@ -169,7 +169,7 @@ def main():
                     webbrowser.open(url, new=2)
                     countdown(articleCountdown, 'Next article in: {}')
             print('\n')
-        if rank == articleCount: print(f'Top {articleCount} articles reached!'); break
+            if rank == articleCount: print(f'Top {articleCount} articles reached!'); break
 
 if __name__ == "__main__":
     if os.name != 'nt': input("This app tested on Windows 10.\nBut you can still run it on other OSes.\nPress enter to continue or ctrl+c to exit\n")
