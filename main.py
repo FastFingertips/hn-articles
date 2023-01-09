@@ -4,6 +4,10 @@ import requests
 import webbrowser
 import time as time
 from datetime import datetime
+from rich.console import Console
+crich = Console()
+
+
 
 def getTimestamp():
     dt = datetime.now()
@@ -145,7 +149,7 @@ def defaultReworker(defaultValue, minValue, maxValue, q):
 def main():
     articleCount = defaultReworker(60, 0, 500, 'How many articles do you want to see?')
     articleCountdown = defaultReworker(60, 0, 3600, 'How many seconds do you want to wait between each article?')
-
+    increaseLoop = True # Every loop end increase articleCount by 1
     while True:
         print('Getting articles...\n')
         os.system(f'title Getting articles...  ') 
@@ -156,20 +160,26 @@ def main():
             articleDict = articleParser(articleJson)
 
             # dictToTable(articleDict, articleDict["title"])
-            no = str(rank + 1)
-            print(no)
+            print('Article:', str(rank + 1))
+            hideList = ['kids']
             for key, value in articleDict.items():
-                blanks = parallelBlank(key, articleDict)
-                print(f'{key}:{blanks} {value}')
+                crich.print(f"{key:^14}: {value if key not in hideList else '***'}", style="yellow", highlight=False)
 
             url = articleDict['url']
-            if url != '':
+            if len(url):
                 filechange = urlcheck(url)
                 if filechange:
-                    webbrowser.open(url, new=2)
+                    # bring the window to the front also open the url python
+                    os.system(f'start {url}')
+                    
                     countdown(articleCountdown, 'Next article in: {}')
             print('\n')
-            if rank == articleCount: print(f'Top {articleCount} articles reached!'); break
+            if rank == articleCount: 
+                print(f'Top {articleCount} articles reached!')
+                if increaseLoop:
+                    articleCount += 1
+                    print(f'Article count increased to {articleCount}')
+                break
 
 if __name__ == "__main__":
     if os.name != 'nt': input("This app tested on Windows 10.\nBut you can still run it on other OSes.\nPress enter to continue or ctrl+c to exit\n")
